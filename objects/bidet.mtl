@@ -1,0 +1,17 @@
+# 3D model bidet.obj
+
+newmtl Rectangle02_1
+illum 2
+Ka 0.0784 0.0784 0.0784
+Kd 0.8 0.8 0.8
+Ks 1 1 1
+Ns 80.0
+Ni 1.5
+
+newmtl Cylinder02_2
+illum 2
+Ka 0.0784 0.0784 0.0784
+Kd 0.284 0.284 0.284
+Ks 1 1 1
+Ns 100
+Ni 1.5

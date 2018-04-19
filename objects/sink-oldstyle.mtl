@@ -1,0 +1,23 @@
+# Created with Anim8or 0.97d beta
+# Object "object01":
+
+newmtl cabinets___main
+Ka 0.2 0.2 0.2
+Kd 1 0.167 0.176
+Ks 1 0.3 0.3
+d 1.0
+Ns 100.3
+
+newmtl porcelain_white
+Ka 0.2 0.2 0.2
+Kd 1 0.996 0.996
+Ks 1 1 1
+d 1.0
+Ns 752.6
+
+newmtl Steel
+Ka 0 0 0
+Kd 0.4 0.4 0.4
+Ks 1 1 1
+d 1.0
+Ns 752.6

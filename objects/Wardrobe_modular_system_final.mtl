@@ -1,0 +1,254 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 17.07.2017 13:53:01
+
+newmtl Material__107
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5000 0.5000 0.5000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl Material__130
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0 0 0
+	Kd 1 1 1
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\wood_d.jpg
+	map_Kd textures\wood_d.png
+	map_bump textures\wood_b.jpg
+	bump textures\wood_b.jpg
+	map_refl textures\Mask_Mask.tga
+
+newmtl Material__110
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 1.0000 0.7098 0.5686
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_refl textures\Raytrace_Raytrace.tga
+
+newmtl Material__131
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0 0 0
+	Kd 1 1 1
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\wood_d.jpg
+	map_Kd textures\wood_d.png
+	map_bump textures\wood_b.jpg
+	bump textures\wood_b.jpg
+	map_refl textures\Mask_Mask.tga
+
+newmtl Material__112
+	Ns 50.0000
+	Ni 1.0100
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_refl textures\Raytrace_Raytrace.tga
+
+newmtl chrom1
+	Ns 50.0000
+	Ni 2.9700
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.1961 0.1961 0.1961
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_refl textures\Raytrace_Raytrace.tga
+
+newmtl Material__128
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0 0 0
+	Kd 1 1 1
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\wood_d.jpg
+	map_Kd textures\wood_d.png
+	map_bump textures\wood_b.jpg
+	bump textures\wood_b.jpg
+	map_refl textures\Mask_Mask.tga
+
+newmtl Material__103
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 1.0000 0.7098 0.5686
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_refl textures\Raytrace_Raytrace.tga
+
+newmtl Material__129
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0 0 0
+	Kd 1 1 1
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\wood_d.jpg
+	map_Kd textures\wood_d.png
+	map_bump textures\wood_b.jpg
+	bump textures\wood_b.jpg
+	map_refl textures\Mask_Mask.tga
+
+newmtl Material__123
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Kd 1 1 1
+	Kd 0.5000 0.5000 0.5000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\rotan_d.jpg
+	map_Kd textures\rotan_d.png
+	map_bump textures\rotan_b.jpg
+	bump textures\rotan_b.jpg
+	map_refl textures\Mask_Mask.tga
+
+newmtl Material__127
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0 0 0
+	Kd 1 1 1
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\wood_d.jpg
+	map_Kd textures\wood_d.png
+	map_bump textures\wood_b.jpg
+	bump textures\wood_b.jpg
+	map_refl textures\Mask_Mask.tga
+
+newmtl Material__116
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0 0 0
+	Kd 1 1 1
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\wood_d.jpg
+	map_Kd textures\wood_d.png
+	map_bump textures\wood_b.jpg
+	bump textures\wood_b.jpg
+	map_refl textures\Mask_Mask.tga
+
+newmtl Material__114
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 1.0000 0.7098 0.5686
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_refl textures\Raytrace_Raytrace.tga
+
+newmtl Material__125
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0 0 0
+	Kd 1 1 1
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\wood_d.jpg
+	map_Kd textures\wood_d.png
+	map_bump textures\wood_b.jpg
+	bump textures\wood_b.jpg
+	map_refl textures\Mask_Mask.tga
+
+newmtl mirror__1
+	Ns 50.0000
+	Ni 1.0100
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Kd 1 1 1
+	Kd 0.0000 0.0000 0.0000
+	Ks 1 1 1
+	Ke 0.0000 0.0000 0.0000
+	map_refl textures\Raytrace_Raytrace.tga
+
+newmtl metal_matte
+	Ns 50.0000
+	Ni 2.9700
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.4392 0.4392 0.4392
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_refl textures\Raytrace_Raytrace.tga
+
+newmtl Material__134
+	Ns 50.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.9020 0.9020 0.9020
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_refl textures\Raytrace_Raytrace.tga
