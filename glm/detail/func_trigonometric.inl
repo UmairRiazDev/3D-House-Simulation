@@ -194,7 +194,11 @@ namespace glm
 	}
 }//namespace glm
 
+//what is this? if we do not comment this part we would have an error when building the project.
+//23 Apr 2018
+/*
 #if GLM_ARCH != GLM_ARCH_PURE && GLM_HAS_UNRESTRICTED_UNIONS
 #	include "func_trigonometric_simd.inl"
 #endif
+*/
 
