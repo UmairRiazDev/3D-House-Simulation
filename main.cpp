@@ -1180,7 +1180,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(1024, 768);
 
-	glutCreateWindow("Viewer"); 
+	glutCreateWindow("3D Virtual House"); 
 	glewInit();
 	initOpengl();
 
