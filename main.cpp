@@ -48,6 +48,9 @@
 #pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "soil32.lib")
 
+//opengl 3.X & glsl 3XX availability
+bool isOpenGL3Available = true;
+
 // matrices
 glm::mat4 g_model;
 glm::mat4 g_normalMat;
@@ -360,41 +363,61 @@ typedef struct SMesh
 		if (m_vao)
 			return;
 		// create vao
-		glGenVertexArrays(1, &m_vao);
+		if (isOpenGL3Available) {
+			glGenVertexArrays(1, &m_vao);
+		}
+		else {
+			glGenBuffers(1, &m_vao);
+		}
 		glGenBuffers(1, &m_v);
 		glGenBuffers(1, &m_n);
 		glGenBuffers(1, &m_t);
 
 		// setting vao as current
-		glBindVertexArray(m_vao);
-
+		GLint pos0, pos1, pos2;
+		if (isOpenGL3Available) {
+			glBindVertexArray(m_vao);
+			//for GLSL 3xx: positions are defined in shaders itself.
+			pos0 = 0;
+			pos1 = 1;
+			pos2 = 2;
+		}
+		else {
+			//for GLSL 1xx: positions depend on runtime.
+			glBindBuffer(GL_ARRAY_BUFFER, m_vao);
+			pos0 = glGetAttribLocation(p, "inPosition");
+			pos1 = glGetAttribLocation(p, "inNormal");
+			pos2 = glGetAttribLocation(p, "inTex");
+		}
+		
 		if (m_verteces.size())
 		{
 			// uploading vertexes
 			glBindBuffer(GL_ARRAY_BUFFER, m_v);
-			glEnableVertexAttribArray(0);
+			glEnableVertexAttribArray(pos0);
 			glBufferData(GL_ARRAY_BUFFER, m_verteces.size() * sizeof(SVertex), m_verteces.data(), GL_STATIC_DRAW);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glVertexAttribPointer(pos0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		if (m_normals.size())
 		{
 			// upload normals
 			glBindBuffer(GL_ARRAY_BUFFER, m_n);
-			glEnableVertexAttribArray(1);
+			glEnableVertexAttribArray(pos1);
 			glBufferData(GL_ARRAY_BUFFER, m_normals.size() * sizeof(SVertex), m_normals.data(), GL_STATIC_DRAW);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glVertexAttribPointer(pos1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		if (m_texCoords.size())
 		{
 			// upload texture coordinates
 			glBindBuffer(GL_ARRAY_BUFFER, m_t);
-			glEnableVertexAttribArray(2);
+			glEnableVertexAttribArray(pos2);
 			glBufferData(GL_ARRAY_BUFFER, m_texCoords.size() * sizeof(STexCoord), m_texCoords.data(), GL_STATIC_DRAW);
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glVertexAttribPointer(pos2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 
 		// unbinding
-		glBindVertexArray(NULL);
+		if (isOpenGL3Available)
+			glBindVertexArray(NULL);
 	}
 
 	// render the mesh using a program p and a material mat
@@ -403,37 +426,51 @@ typedef struct SMesh
 		loadIntoGPU(p);
 		mat.set(p);
 		glUniform1i(iLocHasNormal,  m_normals.size() ? 1 : 0);
-		glBindVertexArray(m_vao);
+		GLint pos0, pos1, pos2;
+		if (isOpenGL3Available)
+		{
+			glBindVertexArray(m_vao);
+			pos0 = 0;
+			pos1 = 1;
+			pos2 = 2;
+		}
+		else {
+			glBindBuffer(GL_ARRAY_BUFFER, m_vao);
+			pos0 = glGetAttribLocation(p, "inPosition");
+			pos1 = glGetAttribLocation(p, "inNormal");
+			pos2 = glGetAttribLocation(p, "inTex");
+		}
 
 		// pos
 		glBindBuffer(GL_ARRAY_BUFFER, m_v);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(pos0);
+		glVertexAttribPointer(pos0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		// normal
 		if (m_normals.size())
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_n);
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(pos1);
+			glVertexAttribPointer(pos1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		else
-			glDisableVertexAttribArray(1);
+			glDisableVertexAttribArray(pos1);
 		// tex
 		if (m_texCoords.size())
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_t);
-			glEnableVertexAttribArray(2);
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(pos2);
+			glVertexAttribPointer(pos2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		else
-			glDisableVertexAttribArray(2);
+			glDisableVertexAttribArray(pos2);
 		// render here
 		glDrawArrays(GL_TRIANGLES, 0, m_verteces.size());
 
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-		glBindVertexArray(0);
+		glDisableVertexAttribArray(pos0);
+		glDisableVertexAttribArray(pos1);
+		glDisableVertexAttribArray(pos2);
+		if (isOpenGL3Available)
+			glBindVertexArray(0);
 
 	}
 } SMesh;
@@ -1037,16 +1074,34 @@ void initOpengl()
 {
 	memset(g_lastKeys, 0, sizeof(int) * 4);
 	glEnable(GL_DEPTH_TEST);
-
+	
 	// loading vertex and fragment shaders
-	if (g_shader.loadShader("vertex.shader", "fragment.shader") == false)
+	try 
 	{
-		printf("Error in shaders. Press enter to finish-->\n");
-		getchar();
-		exit(1);
+		 char* vertex_shader;
+		 char* fragment_shader;
+		 if (isOpenGL3Available) {
+			 vertex_shader = "vertex.shader";
+			 fragment_shader = "vertex.shader";
+		 }
+		 else {
+			 vertex_shader = "vertex120.shader";
+			 fragment_shader = "vertex120.shader";
+		 }
+		
+		 if (g_shader.loadShader(vertex_shader, fragment_shader) == false)
+		 {
+			 printf("Error in shaders. Press enter to finish-->\n");
+			 getchar();
+			 exit(1);
+		 }
+	 }
+	catch(exception) {
+		printf("Exception in shaders\n");;
 	}
-	g_shader.setCurrent();
 
+	g_shader.setCurrent();
+	
 	// initializing location of each shader
 	iLocPosition = glGetAttribLocation(g_shader.getProgram(), "inPosition");
 	iLocNormal   = glGetAttribLocation(g_shader.getProgram(), "inNormal");
@@ -1062,7 +1117,7 @@ void initOpengl()
 	iLocTexture_diffuse1 = glGetUniformLocation(g_shader.getProgram(), "texture_diffuse1");
 	iLocHasTexture = glGetUniformLocation(g_shader.getProgram(), "hasTexture");
 	iLocHasNormal = glGetUniformLocation(g_shader.getProgram(), "hasNormal");
-
+	
 	// default projection  nmatrix
 	g_projection = glm::perspective(3.14159f / 3.0f, (float)g_width / (float)g_height, NCP, FCP);
 	glUniformMatrix4fv(iLocProjection, 1, GL_FALSE, glm::value_ptr(g_projection));
@@ -1181,7 +1236,15 @@ int main(int argc, char** argv)
 	glutInitWindowSize(1024, 768);
 
 	glutCreateWindow("Viewer"); 
-	glewInit();
+	char* ver = (char*)glGetString(GL_VERSION);
+	isOpenGL3Available = ver[0] > '2';
+	if (!isOpenGL3Available)
+		glewExperimental = GLU_TRUE;
+	GLenum err = glewInit();
+	if (err != GLEW_OK)
+	{
+		return 0;
+	}
 	initOpengl();
 
 	// loading all .obj and .mat
