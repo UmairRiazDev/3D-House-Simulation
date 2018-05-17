@@ -1086,7 +1086,7 @@ void initOpengl()
 		 }
 		 else {
 			 vertex_shader = "vertex120.shader";
-			 fragment_shader = "vertex120.shader";
+			 fragment_shader = "fragment120.shader";
 		 }
 		
 		 if (g_shader.loadShader(vertex_shader, fragment_shader) == false)
