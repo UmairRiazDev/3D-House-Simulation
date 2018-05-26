@@ -44,6 +44,12 @@
 // number of objects in the scene
 #define N_OBJECTS 23
 
+//Walls color enum
+#define RED 1
+#define GREEN 2
+#define BLUE 3
+
+
 // libraries to link
 #pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "soil32.lib")
@@ -1052,7 +1058,7 @@ void drawCallback()
 	updateCamera();
 	for (int i = 0; i < N_OBJECTS; i++)
 		g_obj[i].render(g_shader.getProgram());
-
+	
 	glutSwapBuffers();
 	Sleep(1000 / 60);
 }
@@ -1228,6 +1234,20 @@ void MouseMove(int x, int y)
 	g_lastY = g_height - 1 - y;
 }
 
+void processMenuEvents(int option) {
+
+	switch (option) {
+	case RED:
+		loadObjMat(g_obj[0], "house.obj", "house-redwalls.mtl");
+		break;
+	case GREEN:
+		loadObjMat(g_obj[0], "house.obj", "house-greenwalls.mtl"); 
+		break;
+	case BLUE:
+		loadObjMat(g_obj[0], "house.obj", "house-bluewalls.mtl");
+		break;
+	}
+}
 
 int main(int argc, char** argv) 
 {
@@ -1236,6 +1256,14 @@ int main(int argc, char** argv)
 	glutInitWindowSize(1024, 768);
 
 	glutCreateWindow("Viewer"); 
+	int menu = glutCreateMenu(processMenuEvents);
+	//add entries to our menu
+	glutAddMenuEntry("Red Walls", RED);
+	glutAddMenuEntry("Blue Walls", BLUE);
+	glutAddMenuEntry("Green Walls", GREEN);
+
+	// attach the menu to the right button
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	char* ver = (char*)glGetString(GL_VERSION);
 	isOpenGL3Available = ver[0] > '2';
 	if (!isOpenGL3Available)
@@ -1355,7 +1383,7 @@ int main(int argc, char** argv)
 	}
 	fclose(f);
 	printf("collision map has been created\n");
-
+	
 	// glut callbacks!
 	glutDisplayFunc(drawCallback);
 	glutIdleFunc(drawCallback);
