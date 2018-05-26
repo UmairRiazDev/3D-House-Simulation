@@ -1255,7 +1255,6 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(1024, 768);
 
-	glutCreateWindow("Viewer"); 
 	int menu = glutCreateMenu(processMenuEvents);
 	//add entries to our menu
 	glutAddMenuEntry("Red Walls", RED);
@@ -1273,6 +1272,8 @@ int main(int argc, char** argv)
 	{
 		return 0;
 	}
+	glutCreateWindow("3D Virtual House");
+	glewInit();
 	initOpengl();
 
 	// loading all .obj and .mat
