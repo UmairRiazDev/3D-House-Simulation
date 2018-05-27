@@ -44,11 +44,19 @@
 // number of objects in the scene
 #define N_OBJECTS 23
 
+/*RiGHT-CLICK Menu items Begin */
 //Walls color enum
 #define RED 1
 #define GREEN 2
 #define BLUE 3
+#define ORANGE 4
 
+//Furniture movement enums
+#define MOVE_BED 10
+
+//Reset to default.
+#define RESET -1
+/*RiGHT-CLICK Menu items end */
 
 // libraries to link
 #pragma comment(lib, "glew32.lib")
@@ -91,6 +99,8 @@ bool g_leftPressed = false;
 // last mouse position
 int g_lastY, g_lastX;
 
+//sky color
+float sky_color[3] = {0.3f, 0.5f, 0.8f};
 
 // standar template library
 using namespace std;
@@ -1052,7 +1062,7 @@ void updateCamera()
 // draw callback
 void drawCallback() 
 {
-	glClearColor(0.4, 0.5, 0.8, 1.0);
+	glClearColor(sky_color[0],sky_color[1], sky_color[2], 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	updateCamera();
@@ -1234,48 +1244,8 @@ void MouseMove(int x, int y)
 	g_lastY = g_height - 1 - y;
 }
 
-void processMenuEvents(int option) {
-
-	switch (option) {
-	case RED:
-		loadObjMat(g_obj[0], "house.obj", "house-redwalls.mtl");
-		break;
-	case GREEN:
-		loadObjMat(g_obj[0], "house.obj", "house-greenwalls.mtl"); 
-		break;
-	case BLUE:
-		loadObjMat(g_obj[0], "house.obj", "house-bluewalls.mtl");
-		break;
-	}
-}
-
-int main(int argc, char** argv) 
+void load_default_config()
 {
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitWindowSize(1024, 768);
-
-	glutCreateWindow("Viewer"); 
-	int menu = glutCreateMenu(processMenuEvents);
-	//add entries to our menu
-	glutAddMenuEntry("Red Walls", RED);
-	glutAddMenuEntry("Blue Walls", BLUE);
-	glutAddMenuEntry("Green Walls", GREEN);
-
-	// attach the menu to the right button
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	char* ver = (char*)glGetString(GL_VERSION);
-	isOpenGL3Available = ver[0] > '2';
-	if (!isOpenGL3Available)
-		glewExperimental = GLU_TRUE;
-	GLenum err = glewInit();
-	if (err != GLEW_OK)
-	{
-		return 0;
-	}
-	initOpengl();
-
-	// loading all .obj and .mat
 	loadObjMat(g_obj[0], "house.obj", "house.mtl");
 	loadObjMat(g_obj[1], "3dstylish-fbde01.obj", "3dstylish-fbde01.mtl");
 	loadObjMat(g_obj[2], "desk.obj", "desk.mtl");
@@ -1299,55 +1269,119 @@ int main(int argc, char** argv)
 	loadObjMat(g_obj[20], "VenetianBlind.obj", "VenetianBlind.mtl");
 	loadObjMat(g_obj[21], "VenetianBlind.obj", "VenetianBlind.mtl");
 	loadObjMat(g_obj[22], "Window_001 no glass.obj", "Window_001.mtl");
-	
+
 	// setting the location, size, rotation of every object into the scene
 	g_obj[0].worldBoundingBox(0, 0, -8385, 12442, 2500, 0);
-	g_obj[1].worldBoundingBox(11009 - 240 - 2000, 0, -675 - 240 - 2000, 11009 - 240,      700, -675 - 240);
+	g_obj[1].worldBoundingBox(11009 - 240 - 2000, 0, -675 - 240 - 2000, 11009 - 240, 700, -675 - 240);
 	g_obj[1].setRotation(3.14159f, 0, 1, 0);
-	g_obj[2].worldBoundingBox(11009 - 240 - 2000, 0, -775 - 240 - 4000, 11009 - 240,      700, -775 - 240-3500);
+	g_obj[2].worldBoundingBox(11009 - 240 - 2000, 0, -775 - 240 - 4000, 11009 - 240, 700, -775 - 240 - 3500);
 	g_obj[2].setRotation(3.14159f, 0, 1, 0);
 	g_obj[3].worldLocation(11009 - 240 - 1500, 1050, -775 - 240 - 3800);
 	g_obj[3].scaleObject(1000.0f, 400, 700);
-	g_obj[3].setRotation(-3.14159f/2, 1, 0, 0);
-	g_obj[4].worldBoundingBox(8000-200, 0, -8255, 10000 - 200, 900, -7255);
+	g_obj[3].setRotation(-3.14159f / 2, 1, 0, 0);
+	g_obj[4].worldBoundingBox(8000 - 200, 0, -8255, 10000 - 200, 900, -7255); //bed: 2000, 900, 1000
 	g_obj[4].setRotation(3.14159f, 0, 1, 0);
-	g_obj[5].worldBoundingBox(8500 - 200, 0, -5700, 10500 - 200, 1800, -5200);
+	g_obj[5].worldBoundingBox(8500 - 200, 0, -5700, 10500 - 200, 1800, -5200); //wardobe: 2000, 1800, 500
 	g_obj[5].setRotation(3.14159f, 0, 1, 0);
-	g_obj[6].worldBoundingBox(2800, 0.1f,   -8200, 4500, 800, -6500);
-	g_obj[6].setRotation(3.14159f/2, 0, 1, 0);
+	g_obj[6].worldBoundingBox(2800, 0.1f, -8200, 4500, 800, -6500);
+	g_obj[6].setRotation(3.14159f / 2, 0, 1, 0);
 	g_position = glm::vec3(12442 / 2.0f, 2500 / 2.0f, -8385 / 2.0f);
 	g_obj[7].worldBoundingBox(1800, 0.1f, -8200, 2600, 600, -7400);
 	g_obj[7].setRotation(3.14159f / 2, 0, 1, 0);
-	g_obj[8].worldBoundingBox(7312-600, 0.1f, -7300, 7312, 800, -7300 +800);
+	g_obj[8].worldBoundingBox(7312 - 600, 0.1f, -7300, 7312, 800, -7300 + 800);
 	g_obj[8].setRotation(-3.14159f / 2, 0, 1, 0);
 	g_obj[9].worldBoundingBox(7312 - 600, 0.1f, -8000, 7312, 800, -7400);
 	g_obj[9].setRotation(-3.14159f / 2, 0, 1, 0);
 	g_obj[10].worldBoundingBox(5400, 0.0f, -8255, 5500, 2000.0f, -6400);
 	g_obj[10].setRotation(3.14159f, 0, 1, 0);
 	g_obj[11].worldBoundingBox(1800, 0.0f, -3197, 1900, 2000.0f, -1940);
-	g_obj[12].worldBoundingBox(2660 - 500, 0.1f, -3197, 2660, 800, -3197+500);
-	g_obj[13].worldBoundingBox(2660 - 500, 0.1f, -1940-500, 2660, 800, -1940);
+	g_obj[12].worldBoundingBox(2660 - 500, 0.1f, -3197, 2660, 800, -3197 + 500);
+	g_obj[13].worldBoundingBox(2660 - 500, 0.1f, -1940 - 500, 2660, 800, -1940);
 	g_obj[13].setRotation(-3.14159f, 0, 1, 0);
-	g_obj[14].worldBoundingBox(4847-700, 0.0f, -130 - 700, 4847, 1000, -130);
+	g_obj[14].worldBoundingBox(4847 - 700, 0.0f, -130 - 700, 4847, 1000, -130);
 	g_obj[14].setRotation(-3.14159f, 0, 1, 0);
 	g_obj[15].worldBoundingBox(4047 - 1400, 0.0f, -130 - 600, 4047, 1000, -110);
 	g_obj[15].setRotation(-3.14159f, 0, 1, 0);
 	g_obj[16].worldBoundingBox(4047 - 1400 - 700, 0.0f, -130 - 700, 4047 - 1400, 1700, -130);
 	g_obj[16].setRotation(-3.14159f, 0, 1, 0);
-	g_obj[17].worldBoundingBox(6550-1000, 0.0f, -2800-700/2.0f,	6550 + 1000, 900, -2800 + 700 / 2.0f);
-	g_obj[17].setRotation(-3.14159f/2, 0, 1, 0);
-	g_obj[18].worldBoundingBox(4500 -750, 0.1f, -2800-700/2, 4500 +750, 400, -2800 + 700 / 2);
+	g_obj[17].worldBoundingBox(6550 - 1000, 0.0f, -2800 - 700 / 2.0f, 6550 + 1000, 900, -2800 + 700 / 2.0f);
+	g_obj[17].setRotation(-3.14159f / 2, 0, 1, 0);
+	g_obj[18].worldBoundingBox(4500 - 750, 0.1f, -2800 - 700 / 2, 4500 + 750, 400, -2800 + 700 / 2);
 	g_obj[18].setRotation(3.14159f / 2, 0, 1, 0);
-	g_obj[19].worldBoundingBox(4500 - 550, 400+300, -2800 - 700 / 2, 4500 + 550, 600+300, -2800 + 700 / 2);
+	g_obj[19].worldBoundingBox(4500 - 550, 400 + 300, -2800 - 700 / 2, 4500 + 550, 600 + 300, -2800 + 700 / 2);
 	g_obj[19].setEuler(-3.14159f / 2, +3.14159f / 2, 0);
-	g_obj[20].worldBoundingBox(1117, 400, -7555, 1247, 2500-400, -6000);
+	g_obj[20].worldBoundingBox(1117, 400, -7555, 1247, 2500 - 400, -6000);
 	g_obj[20].setEuler(0, 3.14159f, 0);
-	g_obj[21].worldLocation( (5800+6800)/2.0f, (400+2100)/2.0f, (-8385 - 8255)/2.0f);
-	g_obj[21].scaleObject(130, 2100-400, 1000);
-	g_obj[21].setEuler(0, 3.14159f/2, 0);
+	g_obj[21].worldLocation((5800 + 6800) / 2.0f, (400 + 2100) / 2.0f, (-8385 - 8255) / 2.0f);
+	g_obj[21].scaleObject(130, 2100 - 400, 1000);
+	g_obj[21].setEuler(0, 3.14159f / 2, 0);
 	g_obj[22].worldLocation((1117 + 1247) / 2.0f, (400 + 2500) / 2.0f, (-5055 - 3327) / 2.0f);
-	g_obj[22].scaleObject(-3327 - (-5055)+240, 2500-400, 1247 - 1117 );
+	g_obj[22].scaleObject(-3327 - (-5055) + 240, 2500 - 400, 1247 - 1117);
 	g_obj[22].setEuler(0, 3.14159f / 2, 0);
+
+}
+
+void processMenuEvents(int option) {
+
+	switch (option) {
+	case RED:
+		loadObjMat(g_obj[0], "house.obj", "house-redwalls.mtl");
+		break;
+	case GREEN:
+		loadObjMat(g_obj[0], "house.obj", "house-greenwalls.mtl"); 
+		break;
+	case BLUE:
+		loadObjMat(g_obj[0], "house.obj", "house-bluewalls.mtl");
+		break;
+	case ORANGE:
+		sky_color[0] = 0.8;
+		sky_color[1] = 0.6;
+		sky_color[2] = 0;
+		break;
+	case MOVE_BED:
+		//wardrobe
+		g_obj[5].worldBoundingBox(8000 - 200, 0, -8255, 10000 - 200, 1800, -7755);
+		g_obj[5].setEuler(0, 135, 0);
+		//bed 
+		g_obj[4].worldBoundingBox(8700 - 200, 0, -6200, 10700 - 200, 900, -5200);
+		break;
+	case RESET:
+		load_default_config();
+		break;
+	}
+}
+
+int main(int argc, char** argv) 
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glutInitWindowSize(1024, 768);
+
+	glutCreateWindow("Viewer"); 
+	int menu = glutCreateMenu(processMenuEvents);
+	//add entries to our menu
+	glutAddMenuEntry("Red Walls", RED);
+	glutAddMenuEntry("Blue Walls", BLUE);
+	glutAddMenuEntry("Green Walls", GREEN);
+	glutAddMenuEntry("Orange Sky", ORANGE);
+	glutAddMenuEntry("Move Bed & Wardrobe", MOVE_BED);
+	glutAddMenuEntry("RESET TO DEFAULT", RESET);
+
+	// attach the menu to the right button
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+	char* ver = (char*)glGetString(GL_VERSION);
+	isOpenGL3Available = ver[0] > '2';
+	if (!isOpenGL3Available)
+		glewExperimental = GLU_TRUE;
+	GLenum err = glewInit();
+	if (err != GLEW_OK)
+	{
+		return 0;
+	}
+	initOpengl();
+
+	// loading all .obj and .mat
+	load_default_config();
 
 	// updating the collision map with the scene objects
 	for (int i = 1; i < N_OBJECTS; i++)
