@@ -53,6 +53,7 @@
 
 //Furniture movement enums
 #define MOVE_BED 10
+#define MOVE_SOFA 11
 
 //Reset to default.
 #define RESET -1
@@ -1318,7 +1319,6 @@ void load_default_config()
 	g_obj[22].worldLocation((1117 + 1247) / 2.0f, (400 + 2500) / 2.0f, (-5055 - 3327) / 2.0f);
 	g_obj[22].scaleObject(-3327 - (-5055) + 240, 2500 - 400, 1247 - 1117);
 	g_obj[22].setEuler(0, 3.14159f / 2, 0);
-
 }
 
 void processMenuEvents(int option) {
@@ -1345,6 +1345,13 @@ void processMenuEvents(int option) {
 		//bed 
 		g_obj[4].worldBoundingBox(8700 - 200, 0, -6200, 10700 - 200, 900, -5200);
 		break;
+	case MOVE_SOFA:
+		//g_obj[17].worldBoundingBox(6550 - 1000, 0.0f, -2800 - 700 / 2.0f, 6550 + 1000, 900, -2800 + 700 / 2.0f);
+		g_obj[17].worldBoundingBox(4350 - 1000, 0.0f, -4400 - 700 / 2.0f, 4350 + 1000, 900, -4400 + 700 / 2.0f);
+		g_obj[17].setEuler(0, 90, 0);
+		g_obj[18].setEuler(0, 90, 0);
+		g_obj[19].setEuler(0, 90, 0);
+		break;
 	case RESET:
 		load_default_config();
 		break;
@@ -1365,6 +1372,8 @@ int main(int argc, char** argv)
 	glutAddMenuEntry("Green Walls", GREEN);
 	glutAddMenuEntry("Orange Sky", ORANGE);
 	glutAddMenuEntry("Move Bed & Wardrobe", MOVE_BED);
+	glutAddMenuEntry("Move Sofa", MOVE_SOFA);
+
 	glutAddMenuEntry("RESET TO DEFAULT", RESET);
 
 	// attach the menu to the right button
