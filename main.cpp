@@ -86,7 +86,7 @@ int g_lastKeys[4];
 // texture map: given a string, return its ID in OpenGL
 map <string, unsigned int> g_texManager;
 
-// shader 
+// shader
 CShader g_shader;
 
 // window size
@@ -279,7 +279,7 @@ typedef struct SMaterial
 		m_shininess = 0;
 	}
 
-	// given a texture path, return the opengl ID... 
+	// given a texture path, return the opengl ID...
 	// of the texture has not been loaded, it loads it just 1 time
 	unsigned int getTexture(const string &path)
 	{
@@ -351,7 +351,7 @@ typedef struct SMesh
 
 	SMesh()
 	{
-		m_materialIndex = -1; 
+		m_materialIndex = -1;
 		m_vao = 0;
 	}
 
@@ -405,7 +405,7 @@ typedef struct SMesh
 			pos1 = glGetAttribLocation(p, "inNormal");
 			pos2 = glGetAttribLocation(p, "inTex");
 		}
-		
+
 		if (m_verteces.size())
 		{
 			// uploading vertexes
@@ -638,7 +638,7 @@ public:
 	}
 
 	// get the material index, given the material name
-	// if the material index does not exit, it creates a new entry 
+	// if the material index does not exit, it creates a new entry
 	int getMaterialIndex(const string &matName)
 	{
 		for (int i = 0; i<m_materials.size(); i++)
@@ -652,7 +652,7 @@ public:
 		m_meshes.push_back(SMesh(index));
 		return index;
 	}
-	
+
 	// split the like using a separator
 	void splitLine(const char *line, vector<string> &words, int c = ' ')
 	{
@@ -706,7 +706,7 @@ public:
 		FILE *f = fopen((OBJPATH + filename).c_str(), "rt");
 
 		int error_code = 0;
-		if (f == NULL) 
+		if (f == NULL)
 		{
 			printf("File %d not found\n", filename);
 			return 1;
@@ -847,7 +847,7 @@ public:
 				if (v[i].z > m_meshes[k].m_max.z)  m_meshes[k].m_max.z = v[i].z;
 			}
 
-			// update global bbox 
+			// update global bbox
 			if (k == 0)
 			{
 				m_min = m_meshes[k].m_min;
@@ -1011,9 +1011,9 @@ C3DObject g_obj[N_OBJECTS];
 CollisionMap g_collMap;
 
 // keyboard callback
-void keyboardDown(unsigned char k, int x, int y) 
+void keyboardDown(unsigned char k, int x, int y)
 {
-	switch(k)  
+	switch(k)
 	{
 		case 'q': case  27: exit(0);
 	}
@@ -1060,7 +1060,7 @@ void updateCamera()
 }
 
 // draw callback
-void drawCallback() 
+void drawCallback()
 {
 	glClearColor(sky_color[0],sky_color[1], sky_color[2], 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1068,35 +1068,35 @@ void drawCallback()
 	updateCamera();
 	for (int i = 0; i < N_OBJECTS; i++)
 		g_obj[i].render(g_shader.getProgram());
-	
+
 	glutSwapBuffers();
 	Sleep(1000 / 60);
 }
 
 //resize callback
-void reshapeCallback(int w, int h) 
+void reshapeCallback(int w, int h)
 {
 	if (h == 0)
 		return;
 	glViewport(0, 0, w, h);
-	g_width  = w;   
-	g_height = h;   
+	g_width  = w;
+	g_height = h;
 	g_projection = glm::perspective(3.14159f / 3.0f, (float)g_width / (float)g_height, NCP, FCP);
 	glUniformMatrix4fv(iLocProjection, 1, GL_FALSE, glm::value_ptr(g_projection));
 }
 
 // opengl initialization
-void initOpengl() 
+void initOpengl()
 {
 	memset(g_lastKeys, 0, sizeof(int) * 4);
 	glEnable(GL_DEPTH_TEST);
-	
+
 	// loading vertex and fragment shaders
-	try 
+	try
 	{
 		 char* vertex_shader;
 		 char* fragment_shader;
-		 if (isOpenGL3Available) {
+		 if (isOpenGL3Available && 1 == 2) {
 			 vertex_shader = "vertex.shader";
 			 fragment_shader = "vertex.shader";
 		 }
@@ -1104,7 +1104,7 @@ void initOpengl()
 			 vertex_shader = "vertex120.shader";
 			 fragment_shader = "fragment120.shader";
 		 }
-		
+
 		 if (g_shader.loadShader(vertex_shader, fragment_shader) == false)
 		 {
 			 printf("Error in shaders. Press enter to finish-->\n");
@@ -1117,7 +1117,7 @@ void initOpengl()
 	}
 
 	g_shader.setCurrent();
-	
+
 	// initializing location of each shader
 	iLocPosition = glGetAttribLocation(g_shader.getProgram(), "inPosition");
 	iLocNormal   = glGetAttribLocation(g_shader.getProgram(), "inNormal");
@@ -1133,7 +1133,7 @@ void initOpengl()
 	iLocTexture_diffuse1 = glGetUniformLocation(g_shader.getProgram(), "texture_diffuse1");
 	iLocHasTexture = glGetUniformLocation(g_shader.getProgram(), "hasTexture");
 	iLocHasNormal = glGetUniformLocation(g_shader.getProgram(), "hasNormal");
-	
+
 	// default projection  nmatrix
 	g_projection = glm::perspective(3.14159f / 3.0f, (float)g_width / (float)g_height, NCP, FCP);
 	glUniformMatrix4fv(iLocProjection, 1, GL_FALSE, glm::value_ptr(g_projection));
@@ -1189,7 +1189,7 @@ void specialKeyboardDown(int key, int x, int y)
 }
 
 // releasing a key
-void specialKeyboardUp(int key, int x, int y) 
+void specialKeyboardUp(int key, int x, int y)
 {
 	switch (key)
 	{
@@ -1328,7 +1328,7 @@ void processMenuEvents(int option) {
 		loadObjMat(g_obj[0], "house.obj", "house-redwalls.mtl");
 		break;
 	case GREEN:
-		loadObjMat(g_obj[0], "house.obj", "house-greenwalls.mtl"); 
+		loadObjMat(g_obj[0], "house.obj", "house-greenwalls.mtl");
 		break;
 	case BLUE:
 		loadObjMat(g_obj[0], "house.obj", "house-bluewalls.mtl");
@@ -1342,7 +1342,7 @@ void processMenuEvents(int option) {
 		//wardrobe
 		g_obj[5].worldBoundingBox(8000 - 200, 0, -8255, 10000 - 200, 1800, -7755);
 		g_obj[5].setEuler(0, 135, 0);
-		//bed 
+		//bed
 		g_obj[4].worldBoundingBox(8700 - 200, 0, -6200, 10700 - 200, 900, -5200);
 		break;
 	case RESET:
@@ -1351,13 +1351,13 @@ void processMenuEvents(int option) {
 	}
 }
 
-int main(int argc, char** argv) 
+int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(1024, 768);
 
-	glutCreateWindow("Viewer"); 
+	glutCreateWindow("Viewer");
 	int menu = glutCreateMenu(processMenuEvents);
 	//add entries to our menu
 	glutAddMenuEntry("Red Walls", RED);
@@ -1417,7 +1417,7 @@ int main(int argc, char** argv)
 	}
 	fclose(f);
 	printf("collision map has been created\n");
-	
+
 	// glut callbacks!
 	glutDisplayFunc(drawCallback);
 	glutIdleFunc(drawCallback);

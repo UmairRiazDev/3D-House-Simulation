@@ -1,0 +1,44 @@
+﻿  main.cpp
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(316): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(523): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(526): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'const char *'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(567): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(2263): note: see declaration of 'sscanf'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(583): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(2263): note: see declaration of 'sscanf'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(598): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(2263): note: see declaration of 'sscanf'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(613): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(2263): note: see declaration of 'sscanf'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(644): warning C4018: '<': signed/unsigned mismatch
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(790): warning C4018: '<': signed/unsigned mismatch
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(833): warning C4018: '<': signed/unsigned mismatch
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(840): warning C4018: '<': signed/unsigned mismatch
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(706): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(711): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'const char *'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(752): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(2263): note: see declaration of 'sscanf'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(761): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(2263): note: see declaration of 'sscanf'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(769): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(2263): note: see declaration of 'sscanf'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(873): warning C4018: '<': signed/unsigned mismatch
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(983): warning C4018: '<': signed/unsigned mismatch
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(1337): warning C4305: '=': truncation from 'double' to 'float'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(1338): warning C4305: '=': truncation from 'double' to 'float'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(1402): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
+d:\uab\graphicalmultimediasystem\projects\3dhousesimulation\main.cpp(1412): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(1197): note: see declaration of 'fscanf'
+  soil32.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  Finished generating code
+soil32.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil32.lib(SOIL.obj)' or at 'D:\UAB\GraphicalMultimediaSystem\Projects\3DHouseSimulation\Debug\SOIL.pdb'; linking object as if no debug info
+soil32.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil32.lib(image_helper.obj)' or at 'D:\UAB\GraphicalMultimediaSystem\Projects\3DHouseSimulation\Debug\SOIL.pdb'; linking object as if no debug info
+soil32.lib(stb_image_aug.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil32.lib(stb_image_aug.obj)' or at 'D:\UAB\GraphicalMultimediaSystem\Projects\3DHouseSimulation\Debug\SOIL.pdb'; linking object as if no debug info
+soil32.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil32.lib(image_DXT.obj)' or at 'D:\UAB\GraphicalMultimediaSystem\Projects\3DHouseSimulation\Debug\SOIL.pdb'; linking object as if no debug info
+  Viewer.vcxproj -> D:\UAB\GraphicalMultimediaSystem\Projects\3DHouseSimulation\Debug\Viewer.exe
