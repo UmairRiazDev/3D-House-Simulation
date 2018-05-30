@@ -1321,6 +1321,24 @@ void load_default_config()
 	g_obj[22].setEuler(0, 3.14159f / 2, 0);
 }
 
+void reset_to_default()
+{
+	loadObjMat(g_obj[0], "house.obj", "house.mtl");
+
+	g_obj[4].worldBoundingBox(8000 - 200, 0, -8255, 10000 - 200, 900, -7255); //bed: 2000, 900, 1000
+	g_obj[4].setRotation(3.14159f, 0, 1, 0);
+	g_obj[5].worldBoundingBox(8500 - 200, 0, -5700, 10500 - 200, 1800, -5200); //wardobe: 2000, 1800, 500
+	g_obj[5].setRotation(3.14159f, 0, 1, 0);
+
+	g_obj[17].worldBoundingBox(6550 - 1000, 0.0f, -2800 - 700 / 2.0f, 6550 + 1000, 900, -2800 + 700 / 2.0f);
+	g_obj[17].setRotation(-3.14159f / 2, 0, 1, 0);
+	g_obj[17].setEuler(0, 0, 0);
+	g_obj[18].worldBoundingBox(4500 - 750, 0.1f, -2800 - 700 / 2, 4500 + 750, 400, -2800 + 700 / 2);
+	g_obj[18].setRotation(3.14159f / 2, 0, 1, 0);
+	g_obj[19].worldBoundingBox(4500 - 550, 400 + 300, -2800 - 700 / 2, 4500 + 550, 600 + 300, -2800 + 700 / 2);
+	g_obj[19].setEuler(-3.14159f / 2, +3.14159f / 2, 0);
+}
+
 void processMenuEvents(int option) {
 
 	switch (option) {
@@ -1353,7 +1371,7 @@ void processMenuEvents(int option) {
 
 		//debug - Zejian
 		// Sofa
-		g_obj[17].worldBoundingBox(4500 - 750, 0.1f, -2800 - 700 / 2, 4500 + 750, 1000, -2800 + 700 / 2);
+		g_obj[17].worldBoundingBox(4500 - 750, 0.1f, -2800 - 700 / 2, 4500 + 750, 900, -2800 + 700 / 2);
 		g_obj[17].setRotation(-3.14159f / 2, 0, 1, 0);
 		g_obj[17].setEuler(0, 3.14159f, 0);
 		//TV table
@@ -1364,7 +1382,8 @@ void processMenuEvents(int option) {
 		g_obj[19].setEuler(3.14159f, -3.14159f / 2, 3.14159f / 2);
 		break;
 	case RESET: // not working very well since load defaut configuration would need lots of resource
-		load_default_config(); // in oder to do so, just reload the changed objects
+		// load_default_config(); 
+		reset_to_default(); // in oder to do so, just reload the changed objects
 		break;
 	}
 }
@@ -1385,7 +1404,7 @@ int main(int argc, char** argv)
 	glutAddMenuEntry("Move Bed & Wardrobe", MOVE_BED);
 	glutAddMenuEntry("Move Sofa", MOVE_SOFA);
 
-	glutAddMenuEntry("RESET TO DEFAULT", RESET);
+	glutAddMenuEntry("Reset to Default", RESET);
 
 	// attach the menu to the right button
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
