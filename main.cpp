@@ -1097,7 +1097,7 @@ void initOpengl()
 	{
 		 char* vertex_shader;
 		 char* fragment_shader;
-		 if (isOpenGL3Available && 1 == 2) {
+		 if (isOpenGL3Available && 1 == 2) { // disable OpenGL3.X
 			 vertex_shader = "vertex.shader";
 			 fragment_shader = "vertex.shader";
 		 }
@@ -1346,14 +1346,25 @@ void processMenuEvents(int option) {
 		g_obj[4].worldBoundingBox(8700 - 200, 0, -6200, 10700 - 200, 900, -5200);
 		break;
 	case MOVE_SOFA:
-		//g_obj[17].worldBoundingBox(6550 - 1000, 0.0f, -2800 - 700 / 2.0f, 6550 + 1000, 900, -2800 + 700 / 2.0f);
-		g_obj[17].worldBoundingBox(4350 - 1000, 0.0f, -4400 - 700 / 2.0f, 4350 + 1000, 900, -4400 + 700 / 2.0f);
-		g_obj[17].setEuler(0, 90, 0);
-		g_obj[18].setEuler(0, 90, 0);
-		g_obj[19].setEuler(0, 90, 0);
+		//g_obj[17].worldBoundingBox(4350 - 1000, 0.0f, -4400 - 700 / 2.0f, 4350 + 1000, 900, -4400 + 700 / 2.0f);
+		//g_obj[17].setEuler(0, 90, 0);
+		//g_obj[18].setEuler(0, 90, 0);
+		//g_obj[19].setEuler(0, 90, 0);
+
+		//debug - Zejian
+		// Sofa
+		g_obj[17].worldBoundingBox(4500 - 750, 0.1f, -2800 - 700 / 2, 4500 + 750, 1000, -2800 + 700 / 2);
+		g_obj[17].setRotation(-3.14159f / 2, 0, 1, 0);
+		g_obj[17].setEuler(0, 3.14159f, 0);
+		//TV table
+		g_obj[18].worldBoundingBox(6550 - 1000, 0.0f, -2800 - 700 / 2.0f, 6550 + 1000, 400, -2800 + 700 / 2.0f);
+		g_obj[18].setRotation(3.14159f / 2, 0, 1, 0);
+		// move TV and rotate TV
+		g_obj[19].worldBoundingBox(6550 - 800, 400 + 300, -2800 - 700 / 2.0f, 6550 + 1000, 600 + 300, -2800 + 700 / 2.0f);
+		g_obj[19].setEuler(3.14159f, -3.14159f / 2, 3.14159f / 2);
 		break;
-	case RESET:
-		load_default_config();
+	case RESET: // not working very well since load defaut configuration would need lots of resource
+		load_default_config(); // in oder to do so, just reload the changed objects
 		break;
 	}
 }
@@ -1364,7 +1375,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(1024, 768);
 
-	glutCreateWindow("Viewer");
+	glutCreateWindow("3D Apartment");
 	int menu = glutCreateMenu(processMenuEvents);
 	//add entries to our menu
 	glutAddMenuEntry("Red Walls", RED);
