@@ -44,9 +44,27 @@
 // number of objects in the scene
 #define N_OBJECTS 23
 
+/*RiGHT-CLICK Menu items Begin */
+//Walls color enum
+#define RED 1
+#define GREEN 2
+#define BLUE 3
+#define ORANGE 4
+
+//Furniture movement enums
+#define MOVE_BED 10
+#define MOVE_SOFA 11
+
+//Reset to default.
+#define RESET -1
+/*RiGHT-CLICK Menu items end */
+
 // libraries to link
 #pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "soil32.lib")
+
+//opengl 3.X & glsl 3XX availability
+bool isOpenGL3Available = true;
 
 // matrices
 glm::mat4 g_model;
@@ -82,6 +100,8 @@ bool g_leftPressed = false;
 // last mouse position
 int g_lastY, g_lastX;
 
+//sky color
+float sky_color[3] = {0.3f, 0.5f, 0.8f};
 
 // standar template library
 using namespace std;
@@ -360,41 +380,61 @@ typedef struct SMesh
 		if (m_vao)
 			return;
 		// create vao
-		glGenVertexArrays(1, &m_vao);
+		if (isOpenGL3Available) {
+			glGenVertexArrays(1, &m_vao);
+		}
+		else {
+			glGenBuffers(1, &m_vao);
+		}
 		glGenBuffers(1, &m_v);
 		glGenBuffers(1, &m_n);
 		glGenBuffers(1, &m_t);
 
 		// setting vao as current
-		glBindVertexArray(m_vao);
-
+		GLint pos0, pos1, pos2;
+		if (isOpenGL3Available) {
+			glBindVertexArray(m_vao);
+			//for GLSL 3xx: positions are defined in shaders itself.
+			pos0 = 0;
+			pos1 = 1;
+			pos2 = 2;
+		}
+		else {
+			//for GLSL 1xx: positions depend on runtime.
+			glBindBuffer(GL_ARRAY_BUFFER, m_vao);
+			pos0 = glGetAttribLocation(p, "inPosition");
+			pos1 = glGetAttribLocation(p, "inNormal");
+			pos2 = glGetAttribLocation(p, "inTex");
+		}
+		
 		if (m_verteces.size())
 		{
 			// uploading vertexes
 			glBindBuffer(GL_ARRAY_BUFFER, m_v);
-			glEnableVertexAttribArray(0);
+			glEnableVertexAttribArray(pos0);
 			glBufferData(GL_ARRAY_BUFFER, m_verteces.size() * sizeof(SVertex), m_verteces.data(), GL_STATIC_DRAW);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glVertexAttribPointer(pos0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		if (m_normals.size())
 		{
 			// upload normals
 			glBindBuffer(GL_ARRAY_BUFFER, m_n);
-			glEnableVertexAttribArray(1);
+			glEnableVertexAttribArray(pos1);
 			glBufferData(GL_ARRAY_BUFFER, m_normals.size() * sizeof(SVertex), m_normals.data(), GL_STATIC_DRAW);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glVertexAttribPointer(pos1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		if (m_texCoords.size())
 		{
 			// upload texture coordinates
 			glBindBuffer(GL_ARRAY_BUFFER, m_t);
-			glEnableVertexAttribArray(2);
+			glEnableVertexAttribArray(pos2);
 			glBufferData(GL_ARRAY_BUFFER, m_texCoords.size() * sizeof(STexCoord), m_texCoords.data(), GL_STATIC_DRAW);
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glVertexAttribPointer(pos2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 
 		// unbinding
-		glBindVertexArray(NULL);
+		if (isOpenGL3Available)
+			glBindVertexArray(NULL);
 	}
 
 	// render the mesh using a program p and a material mat
@@ -403,37 +443,51 @@ typedef struct SMesh
 		loadIntoGPU(p);
 		mat.set(p);
 		glUniform1i(iLocHasNormal,  m_normals.size() ? 1 : 0);
-		glBindVertexArray(m_vao);
+		GLint pos0, pos1, pos2;
+		if (isOpenGL3Available)
+		{
+			glBindVertexArray(m_vao);
+			pos0 = 0;
+			pos1 = 1;
+			pos2 = 2;
+		}
+		else {
+			glBindBuffer(GL_ARRAY_BUFFER, m_vao);
+			pos0 = glGetAttribLocation(p, "inPosition");
+			pos1 = glGetAttribLocation(p, "inNormal");
+			pos2 = glGetAttribLocation(p, "inTex");
+		}
 
 		// pos
 		glBindBuffer(GL_ARRAY_BUFFER, m_v);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(pos0);
+		glVertexAttribPointer(pos0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		// normal
 		if (m_normals.size())
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_n);
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(pos1);
+			glVertexAttribPointer(pos1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		else
-			glDisableVertexAttribArray(1);
+			glDisableVertexAttribArray(pos1);
 		// tex
 		if (m_texCoords.size())
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_t);
-			glEnableVertexAttribArray(2);
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(pos2);
+			glVertexAttribPointer(pos2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		else
-			glDisableVertexAttribArray(2);
+			glDisableVertexAttribArray(pos2);
 		// render here
 		glDrawArrays(GL_TRIANGLES, 0, m_verteces.size());
 
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-		glBindVertexArray(0);
+		glDisableVertexAttribArray(pos0);
+		glDisableVertexAttribArray(pos1);
+		glDisableVertexAttribArray(pos2);
+		if (isOpenGL3Available)
+			glBindVertexArray(0);
 
 	}
 } SMesh;
@@ -1009,13 +1063,13 @@ void updateCamera()
 // draw callback
 void drawCallback() 
 {
-	glClearColor(0.4, 0.5, 0.8, 1.0);
+	glClearColor(sky_color[0],sky_color[1], sky_color[2], 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	updateCamera();
 	for (int i = 0; i < N_OBJECTS; i++)
 		g_obj[i].render(g_shader.getProgram());
-
+	
 	glutSwapBuffers();
 	Sleep(1000 / 60);
 }
@@ -1037,16 +1091,34 @@ void initOpengl()
 {
 	memset(g_lastKeys, 0, sizeof(int) * 4);
 	glEnable(GL_DEPTH_TEST);
-
+	
 	// loading vertex and fragment shaders
-	if (g_shader.loadShader("vertex.shader", "fragment.shader") == false)
+	try 
 	{
-		printf("Error in shaders. Press enter to finish-->\n");
-		getchar();
-		exit(1);
+		 char* vertex_shader;
+		 char* fragment_shader;
+		 if (isOpenGL3Available) {
+			 vertex_shader = "vertex.shader";
+			 fragment_shader = "vertex.shader";
+		 }
+		 else {
+			 vertex_shader = "vertex120.shader";
+			 fragment_shader = "fragment120.shader";
+		 }
+		
+		 if (g_shader.loadShader(vertex_shader, fragment_shader) == false)
+		 {
+			 printf("Error in shaders. Press enter to finish-->\n");
+			 getchar();
+			 exit(1);
+		 }
+	 }
+	catch(exception) {
+		printf("Exception in shaders\n");;
 	}
-	g_shader.setCurrent();
 
+	g_shader.setCurrent();
+	
 	// initializing location of each shader
 	iLocPosition = glGetAttribLocation(g_shader.getProgram(), "inPosition");
 	iLocNormal   = glGetAttribLocation(g_shader.getProgram(), "inNormal");
@@ -1062,7 +1134,7 @@ void initOpengl()
 	iLocTexture_diffuse1 = glGetUniformLocation(g_shader.getProgram(), "texture_diffuse1");
 	iLocHasTexture = glGetUniformLocation(g_shader.getProgram(), "hasTexture");
 	iLocHasNormal = glGetUniformLocation(g_shader.getProgram(), "hasNormal");
-
+	
 	// default projection  nmatrix
 	g_projection = glm::perspective(3.14159f / 3.0f, (float)g_width / (float)g_height, NCP, FCP);
 	glUniformMatrix4fv(iLocProjection, 1, GL_FALSE, glm::value_ptr(g_projection));
@@ -1173,18 +1245,8 @@ void MouseMove(int x, int y)
 	g_lastY = g_height - 1 - y;
 }
 
-
-int main(int argc, char** argv) 
+void load_default_config()
 {
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitWindowSize(1024, 768);
-
-	glutCreateWindow("3D Virtual House"); 
-	glewInit();
-	initOpengl();
-
-	// loading all .obj and .mat
 	loadObjMat(g_obj[0], "house.obj", "house.mtl");
 	loadObjMat(g_obj[1], "3dstylish-fbde01.obj", "3dstylish-fbde01.mtl");
 	loadObjMat(g_obj[2], "desk.obj", "desk.mtl");
@@ -1208,55 +1270,127 @@ int main(int argc, char** argv)
 	loadObjMat(g_obj[20], "VenetianBlind.obj", "VenetianBlind.mtl");
 	loadObjMat(g_obj[21], "VenetianBlind.obj", "VenetianBlind.mtl");
 	loadObjMat(g_obj[22], "Window_001 no glass.obj", "Window_001.mtl");
-	
+
 	// setting the location, size, rotation of every object into the scene
 	g_obj[0].worldBoundingBox(0, 0, -8385, 12442, 2500, 0);
-	g_obj[1].worldBoundingBox(11009 - 240 - 2000, 0, -675 - 240 - 2000, 11009 - 240,      700, -675 - 240);
+	g_obj[1].worldBoundingBox(11009 - 240 - 2000, 0, -675 - 240 - 2000, 11009 - 240, 700, -675 - 240);
 	g_obj[1].setRotation(3.14159f, 0, 1, 0);
-	g_obj[2].worldBoundingBox(11009 - 240 - 2000, 0, -775 - 240 - 4000, 11009 - 240,      700, -775 - 240-3500);
+	g_obj[2].worldBoundingBox(11009 - 240 - 2000, 0, -775 - 240 - 4000, 11009 - 240, 700, -775 - 240 - 3500);
 	g_obj[2].setRotation(3.14159f, 0, 1, 0);
 	g_obj[3].worldLocation(11009 - 240 - 1500, 1050, -775 - 240 - 3800);
 	g_obj[3].scaleObject(1000.0f, 400, 700);
-	g_obj[3].setRotation(-3.14159f/2, 1, 0, 0);
-	g_obj[4].worldBoundingBox(8000-200, 0, -8255, 10000 - 200, 900, -7255);
+	g_obj[3].setRotation(-3.14159f / 2, 1, 0, 0);
+	g_obj[4].worldBoundingBox(8000 - 200, 0, -8255, 10000 - 200, 900, -7255); //bed: 2000, 900, 1000
 	g_obj[4].setRotation(3.14159f, 0, 1, 0);
-	g_obj[5].worldBoundingBox(8500 - 200, 0, -5700, 10500 - 200, 1800, -5200);
+	g_obj[5].worldBoundingBox(8500 - 200, 0, -5700, 10500 - 200, 1800, -5200); //wardobe: 2000, 1800, 500
 	g_obj[5].setRotation(3.14159f, 0, 1, 0);
-	g_obj[6].worldBoundingBox(2800, 0.1f,   -8200, 4500, 800, -6500);
-	g_obj[6].setRotation(3.14159f/2, 0, 1, 0);
+	g_obj[6].worldBoundingBox(2800, 0.1f, -8200, 4500, 800, -6500);
+	g_obj[6].setRotation(3.14159f / 2, 0, 1, 0);
 	g_position = glm::vec3(12442 / 2.0f, 2500 / 2.0f, -8385 / 2.0f);
 	g_obj[7].worldBoundingBox(1800, 0.1f, -8200, 2600, 600, -7400);
 	g_obj[7].setRotation(3.14159f / 2, 0, 1, 0);
-	g_obj[8].worldBoundingBox(7312-600, 0.1f, -7300, 7312, 800, -7300 +800);
+	g_obj[8].worldBoundingBox(7312 - 600, 0.1f, -7300, 7312, 800, -7300 + 800);
 	g_obj[8].setRotation(-3.14159f / 2, 0, 1, 0);
 	g_obj[9].worldBoundingBox(7312 - 600, 0.1f, -8000, 7312, 800, -7400);
 	g_obj[9].setRotation(-3.14159f / 2, 0, 1, 0);
 	g_obj[10].worldBoundingBox(5400, 0.0f, -8255, 5500, 2000.0f, -6400);
 	g_obj[10].setRotation(3.14159f, 0, 1, 0);
 	g_obj[11].worldBoundingBox(1800, 0.0f, -3197, 1900, 2000.0f, -1940);
-	g_obj[12].worldBoundingBox(2660 - 500, 0.1f, -3197, 2660, 800, -3197+500);
-	g_obj[13].worldBoundingBox(2660 - 500, 0.1f, -1940-500, 2660, 800, -1940);
+	g_obj[12].worldBoundingBox(2660 - 500, 0.1f, -3197, 2660, 800, -3197 + 500);
+	g_obj[13].worldBoundingBox(2660 - 500, 0.1f, -1940 - 500, 2660, 800, -1940);
 	g_obj[13].setRotation(-3.14159f, 0, 1, 0);
-	g_obj[14].worldBoundingBox(4847-700, 0.0f, -130 - 700, 4847, 1000, -130);
+	g_obj[14].worldBoundingBox(4847 - 700, 0.0f, -130 - 700, 4847, 1000, -130);
 	g_obj[14].setRotation(-3.14159f, 0, 1, 0);
 	g_obj[15].worldBoundingBox(4047 - 1400, 0.0f, -130 - 600, 4047, 1000, -110);
 	g_obj[15].setRotation(-3.14159f, 0, 1, 0);
 	g_obj[16].worldBoundingBox(4047 - 1400 - 700, 0.0f, -130 - 700, 4047 - 1400, 1700, -130);
 	g_obj[16].setRotation(-3.14159f, 0, 1, 0);
-	g_obj[17].worldBoundingBox(6550-1000, 0.0f, -2800-700/2.0f,	6550 + 1000, 900, -2800 + 700 / 2.0f);
-	g_obj[17].setRotation(-3.14159f/2, 0, 1, 0);
-	g_obj[18].worldBoundingBox(4500 -750, 0.1f, -2800-700/2, 4500 +750, 400, -2800 + 700 / 2);
+	g_obj[17].worldBoundingBox(6550 - 1000, 0.0f, -2800 - 700 / 2.0f, 6550 + 1000, 900, -2800 + 700 / 2.0f);
+	g_obj[17].setRotation(-3.14159f / 2, 0, 1, 0);
+	g_obj[18].worldBoundingBox(4500 - 750, 0.1f, -2800 - 700 / 2, 4500 + 750, 400, -2800 + 700 / 2);
 	g_obj[18].setRotation(3.14159f / 2, 0, 1, 0);
-	g_obj[19].worldBoundingBox(4500 - 550, 400+300, -2800 - 700 / 2, 4500 + 550, 600+300, -2800 + 700 / 2);
+	g_obj[19].worldBoundingBox(4500 - 550, 400 + 300, -2800 - 700 / 2, 4500 + 550, 600 + 300, -2800 + 700 / 2);
 	g_obj[19].setEuler(-3.14159f / 2, +3.14159f / 2, 0);
-	g_obj[20].worldBoundingBox(1117, 400, -7555, 1247, 2500-400, -6000);
+	g_obj[20].worldBoundingBox(1117, 400, -7555, 1247, 2500 - 400, -6000);
 	g_obj[20].setEuler(0, 3.14159f, 0);
-	g_obj[21].worldLocation( (5800+6800)/2.0f, (400+2100)/2.0f, (-8385 - 8255)/2.0f);
-	g_obj[21].scaleObject(130, 2100-400, 1000);
-	g_obj[21].setEuler(0, 3.14159f/2, 0);
+	g_obj[21].worldLocation((5800 + 6800) / 2.0f, (400 + 2100) / 2.0f, (-8385 - 8255) / 2.0f);
+	g_obj[21].scaleObject(130, 2100 - 400, 1000);
+	g_obj[21].setEuler(0, 3.14159f / 2, 0);
 	g_obj[22].worldLocation((1117 + 1247) / 2.0f, (400 + 2500) / 2.0f, (-5055 - 3327) / 2.0f);
-	g_obj[22].scaleObject(-3327 - (-5055)+240, 2500-400, 1247 - 1117 );
+	g_obj[22].scaleObject(-3327 - (-5055) + 240, 2500 - 400, 1247 - 1117);
 	g_obj[22].setEuler(0, 3.14159f / 2, 0);
+}
+
+void processMenuEvents(int option) {
+
+	switch (option) {
+	case RED:
+		loadObjMat(g_obj[0], "house.obj", "house-redwalls.mtl");
+		break;
+	case GREEN:
+		loadObjMat(g_obj[0], "house.obj", "house-greenwalls.mtl"); 
+		break;
+	case BLUE:
+		loadObjMat(g_obj[0], "house.obj", "house-bluewalls.mtl");
+		break;
+	case ORANGE:
+		sky_color[0] = 0.8;
+		sky_color[1] = 0.6;
+		sky_color[2] = 0;
+		break;
+	case MOVE_BED:
+		//wardrobe
+		g_obj[5].worldBoundingBox(8000 - 200, 0, -8255, 10000 - 200, 1800, -7755);
+		g_obj[5].setEuler(0, 135, 0);
+		//bed 
+		g_obj[4].worldBoundingBox(8700 - 200, 0, -6200, 10700 - 200, 900, -5200);
+		break;
+	case MOVE_SOFA:
+		//g_obj[17].worldBoundingBox(6550 - 1000, 0.0f, -2800 - 700 / 2.0f, 6550 + 1000, 900, -2800 + 700 / 2.0f);
+		g_obj[17].worldBoundingBox(4350 - 1000, 0.0f, -4400 - 700 / 2.0f, 4350 + 1000, 900, -4400 + 700 / 2.0f);
+		g_obj[17].setEuler(0, 90, 0);
+		g_obj[18].setEuler(0, 90, 0);
+		g_obj[19].setEuler(0, 90, 0);
+		break;
+	case RESET:
+		load_default_config();
+		break;
+	}
+}
+
+int main(int argc, char** argv) 
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glutInitWindowSize(1024, 768);
+
+	glutCreateWindow("Viewer"); 
+	int menu = glutCreateMenu(processMenuEvents);
+	//add entries to our menu
+	glutAddMenuEntry("Red Walls", RED);
+	glutAddMenuEntry("Blue Walls", BLUE);
+	glutAddMenuEntry("Green Walls", GREEN);
+	glutAddMenuEntry("Orange Sky", ORANGE);
+	glutAddMenuEntry("Move Bed & Wardrobe", MOVE_BED);
+	glutAddMenuEntry("Move Sofa", MOVE_SOFA);
+
+	glutAddMenuEntry("RESET TO DEFAULT", RESET);
+
+	// attach the menu to the right button
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+	char* ver = (char*)glGetString(GL_VERSION);
+	isOpenGL3Available = ver[0] > '2';
+	if (!isOpenGL3Available)
+		glewExperimental = GLU_TRUE;
+	GLenum err = glewInit();
+	if (err != GLEW_OK)
+	{
+		return 0;
+	}
+	initOpengl();
+
+	// loading all .obj and .mat
+	load_default_config();
 
 	// updating the collision map with the scene objects
 	for (int i = 1; i < N_OBJECTS; i++)
@@ -1292,7 +1426,7 @@ int main(int argc, char** argv)
 	}
 	fclose(f);
 	printf("collision map has been created\n");
-
+	
 	// glut callbacks!
 	glutDisplayFunc(drawCallback);
 	glutIdleFunc(drawCallback);
